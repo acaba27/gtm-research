@@ -1,541 +1,153 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>HappyRobot — Account Research</title>
-  <style>
-    * { box-sizing: border-box; margin: 0; padding: 0; }
-
-    body {
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-      background: #f7f8fa;
-      color: #1a1a2e;
-      min-height: 100vh;
-    }
-
-    header {
-      background: #ffffff;
-      border-bottom: 1px solid #e8eaed;
-      padding: 0 2rem;
-      height: 56px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-    }
-
-    .logo {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      font-size: 15px;
-      font-weight: 600;
-      color: #1a1a2e;
-    }
-
-    .logo-icon {
-      width: 28px;
-      height: 28px;
-      background: #1a1a2e;
-      border-radius: 6px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-
-    .logo-icon svg { width: 16px; height: 16px; }
-
-    .badge {
-      font-size: 11px;
-      background: #eef2ff;
-      color: #4f46e5;
-      padding: 3px 10px;
-      border-radius: 20px;
-      font-weight: 500;
-    }
-
-    main {
-      max-width: 820px;
-      margin: 0 auto;
-      padding: 3rem 2rem;
-    }
-
-    .hero {
-      margin-bottom: 2.5rem;
-    }
-
-    .hero h1 {
-      font-size: 26px;
-      font-weight: 600;
-      color: #1a1a2e;
-      margin-bottom: 8px;
-    }
-
-    .hero p {
-      font-size: 15px;
-      color: #6b7280;
-      line-height: 1.6;
-    }
-
-    .search-card {
-      background: #ffffff;
-      border: 1px solid #e8eaed;
-      border-radius: 14px;
-      padding: 1.75rem;
-      margin-bottom: 2rem;
-    }
-
-    .search-card label {
-      display: block;
-      font-size: 13px;
-      font-weight: 500;
-      color: #374151;
-      margin-bottom: 10px;
-    }
-
-    .search-row {
-      display: flex;
-      gap: 10px;
-    }
-
-    .search-row input {
-      flex: 1;
-      height: 44px;
-      border: 1px solid #e8eaed;
-      border-radius: 8px;
-      padding: 0 14px;
-      font-size: 14px;
-      color: #1a1a2e;
-      background: #f9fafb;
-      outline: none;
-      transition: border-color 0.15s;
-    }
-
-    .search-row input:focus {
-      border-color: #4f46e5;
-      background: #ffffff;
-    }
-
-    .search-row input::placeholder { color: #9ca3af; }
-
-    .btn-primary {
-      height: 44px;
-      padding: 0 24px;
-      background: #1a1a2e;
-      color: #ffffff;
-      border: none;
-      border-radius: 8px;
-      font-size: 14px;
-      font-weight: 500;
-      cursor: pointer;
-      white-space: nowrap;
-      transition: background 0.15s;
-    }
-
-    .btn-primary:hover { background: #2d2d4e; }
-    .btn-primary:disabled { background: #9ca3af; cursor: not-allowed; }
-
-    .suggestions {
-      display: flex;
-      gap: 8px;
-      flex-wrap: wrap;
-      margin-top: 14px;
-    }
-
-    .suggestion-chip {
-      font-size: 12px;
-      color: #6b7280;
-      background: #f3f4f6;
-      border: 1px solid #e8eaed;
-      border-radius: 20px;
-      padding: 4px 12px;
-      cursor: pointer;
-      transition: all 0.15s;
-    }
-
-    .suggestion-chip:hover {
-      background: #eef2ff;
-      color: #4f46e5;
-      border-color: #c7d2fe;
-    }
-
-    .loading-state {
-      display: none;
-      text-align: center;
-      padding: 3rem;
-    }
-
-    .spinner {
-      width: 32px;
-      height: 32px;
-      border: 2px solid #e8eaed;
-      border-top-color: #4f46e5;
-      border-radius: 50%;
-      animation: spin 0.8s linear infinite;
-      margin: 0 auto 1rem;
-    }
-
-    @keyframes spin { to { transform: rotate(360deg); } }
-
-    .loading-state p {
-      font-size: 14px;
-      color: #6b7280;
-    }
-
-    .result {
-      display: none;
-    }
-
-    .result-header {
-      background: #ffffff;
-      border: 1px solid #e8eaed;
-      border-radius: 14px;
-      padding: 1.5rem 1.75rem;
-      margin-bottom: 1rem;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-    }
-
-    .company-info {
-      display: flex;
-      align-items: center;
-      gap: 14px;
-    }
-
-    .avatar {
-      width: 48px;
-      height: 48px;
-      border-radius: 12px;
-      background: #eef2ff;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-weight: 600;
-      font-size: 16px;
-      color: #4f46e5;
-      flex-shrink: 0;
-    }
-
-    .company-name {
-      font-size: 18px;
-      font-weight: 600;
-      color: #1a1a2e;
-      margin-bottom: 3px;
-    }
-
-    .company-type {
-      font-size: 13px;
-      color: #6b7280;
-    }
-
-    .priority-badge {
-      font-size: 12px;
-      font-weight: 500;
-      padding: 5px 14px;
-      border-radius: 20px;
-    }
-
-    .priority-high { background: #fef2f2; color: #dc2626; }
-    .priority-medium { background: #fffbeb; color: #d97706; }
-    .priority-low { background: #f0fdf4; color: #16a34a; }
-
-    .metrics-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 10px;
-      margin-bottom: 1rem;
-    }
-
-    .metric-card {
-      background: #ffffff;
-      border: 1px solid #e8eaed;
-      border-radius: 12px;
-      padding: 1.1rem 1.25rem;
-    }
-
-    .metric-label {
-      font-size: 11px;
-      font-weight: 500;
-      color: #9ca3af;
-      text-transform: uppercase;
-      letter-spacing: 0.06em;
-      margin-bottom: 6px;
-    }
-
-    .metric-value {
-      font-size: 22px;
-      font-weight: 600;
-      color: #1a1a2e;
-    }
-
-    .info-card {
-      background: #ffffff;
-      border: 1px solid #e8eaed;
-      border-radius: 14px;
-      padding: 1.25rem 1.75rem;
-      margin-bottom: 1rem;
-    }
-
-    .info-card-label {
-      font-size: 11px;
-      font-weight: 600;
-      color: #9ca3af;
-      text-transform: uppercase;
-      letter-spacing: 0.07em;
-      margin-bottom: 10px;
-    }
-
-    .info-card p {
-      font-size: 14px;
-      color: #374151;
-      line-height: 1.7;
-    }
-
-    .questions-list {
-      list-style: none;
-      padding: 0;
-    }
-
-    .questions-list li {
-      font-size: 14px;
-      color: #374151;
-      line-height: 1.6;
-      padding: 10px 0;
-      border-bottom: 1px solid #f3f4f6;
-      display: flex;
-      gap: 12px;
-      align-items: flex-start;
-    }
-
-    .questions-list li:last-child { border-bottom: none; }
-
-    .q-number {
-      flex-shrink: 0;
-      width: 22px;
-      height: 22px;
-      background: #eef2ff;
-      color: #4f46e5;
-      border-radius: 50%;
-      font-size: 11px;
-      font-weight: 600;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      margin-top: 1px;
-    }
-
-    .objection-card {
-      background: #fffbeb;
-      border: 1px solid #fde68a;
-      border-radius: 14px;
-      padding: 1.25rem 1.75rem;
-      margin-bottom: 1rem;
-    }
-
-    .objection-card .info-card-label { color: #92400e; }
-    .objection-card p { color: #78350f; }
-
-    .reset-btn {
-      display: block;
-      margin: 1.5rem auto 0;
-      background: none;
-      border: 1px solid #e8eaed;
-      border-radius: 8px;
-      padding: 10px 24px;
-      font-size: 13px;
-      color: #6b7280;
-      cursor: pointer;
-      transition: all 0.15s;
-    }
-
-    .reset-btn:hover {
-      border-color: #d1d5db;
-      color: #374151;
-    }
-
-    @media (max-width: 600px) {
-      .metrics-grid { grid-template-columns: repeat(2, 1fr); }
-      .search-row { flex-direction: column; }
-      .btn-primary { width: 100%; }
-    }
-  </style>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>HappyRobot — Account Research</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:#f7f8fa;color:#1a1a2e;min-height:100vh}
+header{background:#fff;border-bottom:1px solid #e8eaed;padding:0 2rem;height:56px;display:flex;align-items:center;justify-content:space-between}
+.logo{display:flex;align-items:center;gap:10px;font-size:15px;font-weight:600;color:#1a1a2e}
+.logo-icon{width:28px;height:28px;background:#1a1a2e;border-radius:6px;display:flex;align-items:center;justify-content:center}
+.badge{font-size:11px;background:#eef2ff;color:#4f46e5;padding:3px 10px;border-radius:20px;font-weight:500}
+main{max-width:820px;margin:0 auto;padding:3rem 2rem}
+.hero{margin-bottom:2.5rem}
+.hero h1{font-size:26px;font-weight:600;color:#1a1a2e;margin-bottom:8px}
+.hero p{font-size:15px;color:#6b7280;line-height:1.6}
+.search-card{background:#fff;border:1px solid #e8eaed;border-radius:14px;padding:1.75rem;margin-bottom:2rem}
+.search-card label{display:block;font-size:13px;font-weight:500;color:#374151;margin-bottom:10px}
+.search-row{display:flex;gap:10px}
+.search-row input{flex:1;height:44px;border:1px solid #e8eaed;border-radius:8px;padding:0 14px;font-size:14px;color:#1a1a2e;background:#f9fafb;outline:none}
+.search-row input:focus{border-color:#4f46e5;background:#fff}
+.search-row input::placeholder{color:#9ca3af}
+.btn-primary{height:44px;padding:0 24px;background:#1a1a2e;color:#fff;border:none;border-radius:8px;font-size:14px;font-weight:500;cursor:pointer;white-space:nowrap}
+.btn-primary:hover{background:#2d2d4e}
+.btn-primary:disabled{background:#9ca3af;cursor:not-allowed}
+.suggestions{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}
+.suggestion-chip{font-size:12px;color:#6b7280;background:#f3f4f6;border:1px solid #e8eaed;border-radius:20px;padding:4px 12px;cursor:pointer}
+.suggestion-chip:hover{background:#eef2ff;color:#4f46e5;border-color:#c7d2fe}
+.loading-state{display:none;text-align:center;padding:3rem}
+.spinner{width:32px;height:32px;border:2px solid #e8eaed;border-top-color:#4f46e5;border-radius:50%;animation:spin 0.8s linear infinite;margin:0 auto 1rem}
+@keyframes spin{to{transform:rotate(360deg)}}
+.loading-state p{font-size:14px;color:#6b7280}
+.result{display:none}
+.result-header{background:#fff;border:1px solid #e8eaed;border-radius:14px;padding:1.5rem 1.75rem;margin-bottom:1rem;display:flex;align-items:center;justify-content:space-between}
+.company-info{display:flex;align-items:center;gap:14px}
+.avatar{width:48px;height:48px;border-radius:12px;background:#eef2ff;display:flex;align-items:center;justify-content:center;font-weight:600;font-size:16px;color:#4f46e5;flex-shrink:0}
+.company-name{font-size:18px;font-weight:600;color:#1a1a2e;margin-bottom:3px}
+.company-type{font-size:13px;color:#6b7280}
+.priority-badge{font-size:12px;font-weight:500;padding:5px 14px;border-radius:20px}
+.priority-high{background:#fef2f2;color:#dc2626}
+.priority-medium{background:#fffbeb;color:#d97706}
+.priority-low{background:#f0fdf4;color:#16a34a}
+.metrics-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:1rem}
+.metric-card{background:#fff;border:1px solid #e8eaed;border-radius:12px;padding:1.1rem 1.25rem}
+.metric-label{font-size:11px;font-weight:500;color:#9ca3af;text-transform:uppercase;letter-spacing:.06em;margin-bottom:6px}
+.metric-value{font-size:22px;font-weight:600;color:#1a1a2e}
+.info-card{background:#fff;border:1px solid #e8eaed;border-radius:14px;padding:1.25rem 1.75rem;margin-bottom:1rem}
+.info-card-label{font-size:11px;font-weight:600;color:#9ca3af;text-transform:uppercase;letter-spacing:.07em;margin-bottom:10px}
+.info-card p{font-size:14px;color:#374151;line-height:1.7}
+.questions-list{list-style:none;padding:0}
+.questions-list li{font-size:14px;color:#374151;line-height:1.6;padding:10px 0;border-bottom:1px solid #f3f4f6;display:flex;gap:12px;align-items:flex-start}
+.questions-list li:last-child{border-bottom:none}
+.q-number{flex-shrink:0;width:22px;height:22px;background:#eef2ff;color:#4f46e5;border-radius:50%;font-size:11px;font-weight:600;display:flex;align-items:center;justify-content:center;margin-top:1px}
+.objection-card{background:#fffbeb;border:1px solid #fde68a;border-radius:14px;padding:1.25rem 1.75rem;margin-bottom:1rem}
+.objection-card .info-card-label{color:#92400e}
+.objection-card p{color:#78350f}
+.reset-btn{display:block;margin:1.5rem auto 0;background:none;border:1px solid #e8eaed;border-radius:8px;padding:10px 24px;font-size:13px;color:#6b7280;cursor:pointer}
+.reset-btn:hover{border-color:#d1d5db;color:#374151}
+</style>
 </head>
 <body>
-
 <header>
-  <div class="logo">
-    <div class="logo-icon">
-      <svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <circle cx="8" cy="8" r="6" stroke="white" stroke-width="1.5"/>
-        <path d="M5 8.5L7 10.5L11 6" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-      </svg>
-    </div>
-    HappyRobot
-  </div>
-  <span class="badge">GTM Mexico — Account Research</span>
+<div class="logo">
+<div class="logo-icon"><svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="8" cy="8" r="6" stroke="white" stroke-width="1.5"/><path d="M5 8.5L7 10.5L11 6" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+HappyRobot
+</div>
+<span class="badge">GTM Mexico — Account Research</span>
 </header>
-
 <main>
-  <div class="hero">
-    <h1>Pre-call account briefing</h1>
-    <p>Generate a discovery briefing for any logistics company in Mexico before your call. Powered by AI.</p>
-  </div>
-
-  <div class="search-card">
-    <label for="company-input">Company name</label>
-    <div class="search-row">
-      <input type="text" id="company-input" placeholder="e.g. DHL Mexico, XPO Logistics Mexico, Kuehne+Nagel Mexico..." />
-      <button class="btn-primary" onclick="generateBriefing()" id="generate-btn">Generate briefing</button>
-    </div>
-    <div class="suggestions">
-      <span class="suggestion-chip" onclick="fillAndGenerate('DHL Mexico')">DHL Mexico</span>
-      <span class="suggestion-chip" onclick="fillAndGenerate('XPO Logistics Mexico')">XPO Logistics Mexico</span>
-      <span class="suggestion-chip" onclick="fillAndGenerate('Kuehne+Nagel Mexico')">Kuehne+Nagel Mexico</span>
-      <span class="suggestion-chip" onclick="fillAndGenerate('Ceva Logistics Mexico')">Ceva Logistics Mexico</span>
-      <span class="suggestion-chip" onclick="fillAndGenerate('DB Schenker Mexico')">DB Schenker Mexico</span>
-    </div>
-  </div>
-
-  <div class="loading-state" id="loading">
-    <div class="spinner"></div>
-    <p>Researching account...</p>
-  </div>
-
-  <div class="result" id="result">
-
-    <div class="result-header">
-      <div class="company-info">
-        <div class="avatar" id="avatar"></div>
-        <div>
-          <div class="company-name" id="company-name-display"></div>
-          <div class="company-type" id="company-type-display"></div>
-        </div>
-      </div>
-      <span class="priority-badge" id="priority-badge"></span>
-    </div>
-
-    <div class="metrics-grid">
-      <div class="metric-card">
-        <div class="metric-label">Fit score</div>
-        <div class="metric-value" id="fit-score"></div>
-      </div>
-      <div class="metric-card">
-        <div class="metric-label">Est. monthly calls</div>
-        <div class="metric-value" id="call-volume"></div>
-      </div>
-      <div class="metric-card">
-        <div class="metric-label">Revenue potential</div>
-        <div class="metric-value" id="revenue"></div>
-      </div>
-    </div>
-
-    <div class="info-card">
-      <div class="info-card-label">Company overview</div>
-      <p id="overview"></p>
-    </div>
-
-    <div class="info-card">
-      <div class="info-card-label">Why HappyRobot fits</div>
-      <p id="why-fit"></p>
-    </div>
-
-    <div class="info-card">
-      <div class="info-card-label">Discovery questions</div>
-      <ul class="questions-list" id="questions"></ul>
-    </div>
-
-    <div class="objection-card">
-      <div class="info-card-label">Expected objection + how to handle it</div>
-      <p id="objection"></p>
-    </div>
-
-    <button class="reset-btn" onclick="resetForm()">Start new search</button>
-  </div>
+<div class="hero">
+<h1>Pre-call account briefing</h1>
+<p>Generate a discovery briefing for any logistics company in Mexico before your call. Powered by AI.</p>
+</div>
+<div class="search-card">
+<label for="company-input">Company name</label>
+<div class="search-row">
+<input type="text" id="company-input" placeholder="e.g. DHL Mexico, XPO Logistics Mexico..." />
+<button class="btn-primary" onclick="generateBriefing()" id="generate-btn">Generate briefing</button>
+</div>
+<div class="suggestions">
+<span class="suggestion-chip" onclick="fillAndGenerate('DHL Mexico')">DHL Mexico</span>
+<span class="suggestion-chip" onclick="fillAndGenerate('XPO Logistics Mexico')">XPO Logistics Mexico</span>
+<span class="suggestion-chip" onclick="fillAndGenerate('Kuehne+Nagel Mexico')">Kuehne+Nagel Mexico</span>
+<span class="suggestion-chip" onclick="fillAndGenerate('Ceva Logistics Mexico')">Ceva Logistics Mexico</span>
+<span class="suggestion-chip" onclick="fillAndGenerate('DB Schenker Mexico')">DB Schenker Mexico</span>
+</div>
+</div>
+<div class="loading-state" id="loading"><div class="spinner"></div><p>Researching account...</p></div>
+<div class="result" id="result">
+<div class="result-header">
+<div class="company-info">
+<div class="avatar" id="avatar"></div>
+<div><div class="company-name" id="company-name-display"></div><div class="company-type" id="company-type-display"></div></div>
+</div>
+<span class="priority-badge" id="priority-badge"></span>
+</div>
+<div class="metrics-grid">
+<div class="metric-card"><div class="metric-label">Fit score</div><div class="metric-value" id="fit-score"></div></div>
+<div class="metric-card"><div class="metric-label">Est. monthly calls</div><div class="metric-value" id="call-volume"></div></div>
+<div class="metric-card"><div class="metric-label">Revenue potential</div><div class="metric-value" id="revenue"></div></div>
+</div>
+<div class="info-card"><div class="info-card-label">Company overview</div><p id="overview"></p></div>
+<div class="info-card"><div class="info-card-label">Why HappyRobot fits</div><p id="why-fit"></p></div>
+<div class="info-card"><div class="info-card-label">Discovery questions</div><ul class="questions-list" id="questions"></ul></div>
+<div class="objection-card"><div class="info-card-label">Expected objection + how to handle it</div><p id="objection"></p></div>
+<button class="reset-btn" onclick="resetForm()">Start new search</button>
+</div>
 </main>
-
 <script>
-  var API_KEY = "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";
-
-  function fillAndGenerate(name) {
-    document.getElementById('company-input').value = name;
-    generateBriefing();
-  }
-
-  function resetForm() {
-    document.getElementById('result').style.display = 'none';
-    document.getElementById('company-input').value = '';
-    document.getElementById('generate-btn').disabled = false;
-  }
-
-  async function generateBriefing() {
-    var company = document.getElementById('company-input').value.trim();
-    if (!company) return;
-
-    document.getElementById('loading').style.display = 'block';
-    document.getElementById('result').style.display = 'none';
-    document.getElementById('generate-btn').disabled = true;
-
-    var prompt = "You are a GTM research assistant helping expand HappyRobot into the Mexican logistics market. HappyRobot is an AI voice agent platform that automates high-volume phone calls for logistics companies — track & trace, carrier compliance, appointment scheduling, collections, and more. HappyRobot pricing is approximately $315K/year for enterprise accounts.\n\nGenerate a pre-call discovery briefing for: " + company + "\n\nRespond ONLY with valid JSON, no markdown, no backticks, no explanation before or after. Use this exact structure:\n{\"company_type\":\"brief descriptor e.g. Global 3PL\",\"fit_score\":\"e.g. 9/10\",\"call_volume\":\"estimated monthly call volume e.g. 80K+\",\"revenue_potential\":\"estimated ARR e.g. $280K\",\"priority\":\"High\",\"overview\":\"2-3 sentences on the company, their Mexico operations, and scale\",\"why_fit\":\"2-3 sentences on why HappyRobot is a strong fit — be specific to their logistics operation\",\"questions\":[\"question 1\",\"question 2\",\"question 3\",\"question 4\",\"question 5\"],\"objection\":\"The most likely objection this specific company would raise, followed by a concrete reframe or response\"}";
-
-    try {
-      var response = await fetch('https://api.anthropic.com/v1/messages', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'x-api-key': API_KEY,
-          'anthropic-version': '2023-06-01'
-        },
-        body: JSON.stringify({
-          model: 'claude-sonnet-4-20250514',
-          max_tokens: 1000,
-          messages: [{ role: 'user', content: prompt }]
-        })
-      });
-
-      var data = await response.json();
-      var text = data.content[0].text;
-      var clean = text.replace(/```json|```/g, '').trim();
-      var result = JSON.parse(clean);
-
-      var words = company.split(' ');
-      var initials = words.length >= 2 ? words[0][0] + words[1][0] : company.substring(0, 2);
-      document.getElementById('avatar').innerText = initials.toUpperCase();
-      document.getElementById('company-name-display').innerText = company;
-      document.getElementById('company-type-display').innerText = result.company_type;
-      document.getElementById('fit-score').innerText = result.fit_score;
-      document.getElementById('call-volume').innerText = result.call_volume;
-      document.getElementById('revenue').innerText = result.revenue_potential;
-      document.getElementById('overview').innerText = result.overview;
-      document.getElementById('why-fit').innerText = result.why_fit;
-      document.getElementById('objection').innerText = result.objection;
-
-      var badge = document.getElementById('priority-badge');
-      badge.innerText = result.priority;
-      badge.className = 'priority-badge priority-' + result.priority.toLowerCase();
-
-      var ul = document.getElementById('questions');
-      ul.innerHTML = '';
-      result.questions.forEach(function(q, i) {
-        var li = document.createElement('li');
-        li.innerHTML = '<span class="q-number">' + (i + 1) + '</span><span>' + q + '</span>';
-        ul.appendChild(li);
-      });
-
-      document.getElementById('loading').style.display = 'none';
-      document.getElementById('result').style.display = 'block';
-
-    } catch(err) {
-      document.getElementById('loading').innerHTML = '<p style="color:#dc2626;">Error generating briefing. Check your API key and try again.</p>';
-      console.error(err);
-      document.getElementById('generate-btn').disabled = false;
-    }
-  }
-
-  document.getElementById('company-input').addEventListener('keypress', function(e) {
-    if (e.key === 'Enter') generateBriefing();
-  });
+var API_KEY = "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";
+function fillAndGenerate(name){document.getElementById('company-input').value=name;generateBriefing();}
+function resetForm(){document.getElementById('result').style.display='none';document.getElementById('company-input').value='';document.getElementById('generate-btn').disabled=false;}
+async function generateBriefing(){
+var company=document.getElementById('company-input').value.trim();
+if(!company)return;
+document.getElementById('loading').style.display='block';
+document.getElementById('result').style.display='none';
+document.getElementById('generate-btn').disabled=true;
+var prompt="You are a GTM research assistant helping expand HappyRobot into the Mexican logistics market. HappyRobot is an AI voice agent platform that automates high-volume phone calls for logistics companies. Generate a pre-call discovery briefing for: "+company+"\n\nRespond ONLY with valid JSON, no markdown, no backticks. Use this exact structure:\n{\"company_type\":\"brief descriptor\",\"fit_score\":\"e.g. 9/10\",\"call_volume\":\"estimated monthly\",\"revenue_potential\":\"estimated ARR\",\"priority\":\"High\",\"overview\":\"2-3 sentences\",\"why_fit\":\"2-3 sentences specific to their operation\",\"questions\":[\"q1\",\"q2\",\"q3\",\"q4\",\"q5\"],\"objection\":\"main objection + how to handle it\"}";
+try{
+var response=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json','x-api-key':API_KEY,'anthropic-version':'2023-06-01'},body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:1000,messages:[{role:'user',content:prompt}]})});
+var data=await response.json();
+var text=data.content[0].text;
+var clean=text.replace(/```json|```/g,'').trim();
+var result=JSON.parse(clean);
+var words=company.split(' ');
+var initials=words.length>=2?words[0][0]+words[1][0]:company.substring(0,2);
+document.getElementById('avatar').innerText=initials.toUpperCase();
+document.getElementById('company-name-display').innerText=company;
+document.getElementById('company-type-display').innerText=result.company_type;
+document.getElementById('fit-score').innerText=result.fit_score;
+document.getElementById('call-volume').innerText=result.call_volume;
+document.getElementById('revenue').innerText=result.revenue_potential;
+document.getElementById('overview').innerText=result.overview;
+document.getElementById('why-fit').innerText=result.why_fit;
+document.getElementById('objection').innerText=result.objection;
+var badge=document.getElementById('priority-badge');
+badge.innerText=result.priority;
+badge.className='priority-badge priority-'+result.priority.toLowerCase();
+var ul=document.getElementById('questions');
+ul.innerHTML='';
+result.questions.forEach(function(q,i){var li=document.createElement('li');li.innerHTML='<span class="q-number">'+(i+1)+'</span><span>'+q+'</span>';ul.appendChild(li);});
+document.getElementById('loading').style.display='none';
+document.getElementById('result').style.display='block';
+}catch(err){
+document.getElementById('loading').innerHTML='<p style="color:#dc2626;">Error: '+err.message+'</p>';
+document.getElementById('generate-btn').disabled=false;
+}}
+document.getElementById('company-input').addEventListener('keypress',function(e){if(e.key==='Enter')generateBriefing();});
 </script>
-
 </body>
 </html>
