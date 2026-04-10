@@ -108,7 +108,7 @@ HappyRobot
 </div>
 </main>
 <script>
-var API_KEY = "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";
+var PROXY_URL = "https://anthropic-proxy.acabanillaslopezalonso.workers.dev";
 function fillAndGenerate(name){document.getElementById('company-input').value=name;generateBriefing();}
 function resetForm(){document.getElementById('result').style.display='none';document.getElementById('company-input').value='';document.getElementById('generate-btn').disabled=false;}
 async function generateBriefing(){
@@ -119,7 +119,7 @@ document.getElementById('result').style.display='none';
 document.getElementById('generate-btn').disabled=true;
 var prompt="You are a GTM research assistant helping expand HappyRobot into the Mexican logistics market. HappyRobot is an AI voice agent platform that automates high-volume phone calls for logistics companies. Generate a pre-call discovery briefing for: "+company+"\n\nRespond ONLY with valid JSON, no markdown, no backticks. Use this exact structure:\n{\"company_type\":\"brief descriptor\",\"fit_score\":\"e.g. 9/10\",\"call_volume\":\"estimated monthly\",\"revenue_potential\":\"estimated ARR\",\"priority\":\"High\",\"overview\":\"2-3 sentences\",\"why_fit\":\"2-3 sentences specific to their operation\",\"questions\":[\"q1\",\"q2\",\"q3\",\"q4\",\"q5\"],\"objection\":\"main objection + how to handle it\"}";
 try{
-var response=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json','x-api-key':API_KEY,'anthropic-version':'2023-06-01'},body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:1000,messages:[{role:'user',content:prompt}]})});
+var response=await fetch(PROXY_URL,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:1000,messages:[{role:'user',content:prompt}]})});
 var data=await response.json();
 var text=data.content[0].text;
 var clean=text.replace(/```json|```/g,'').trim();
