@@ -119,7 +119,7 @@ document.getElementById('result').style.display='none';
 document.getElementById('generate-btn').disabled=true;
 var prompt="You are a GTM research assistant helping expand HappyRobot into the Mexican logistics market. HappyRobot is an AI voice agent platform that automates high-volume phone calls for logistics companies. Generate a pre-call discovery briefing for: "+company+"\n\nRespond ONLY with valid JSON, no markdown, no backticks. Use this exact structure:\n{\"company_type\":\"brief descriptor\",\"fit_score\":\"e.g. 9/10\",\"call_volume\":\"estimated monthly\",\"revenue_potential\":\"estimated ARR\",\"priority\":\"High\",\"overview\":\"2-3 sentences\",\"why_fit\":\"2-3 sentences specific to their operation\",\"questions\":[\"q1\",\"q2\",\"q3\",\"q4\",\"q5\"],\"objection\":\"main objection + how to handle it\"}";
 try{
-var response=await fetch(PROXY_URL,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'claude-sonnet-4-5-20251001',max_tokens:1000,messages:[{role:'user',content:prompt}]})});
+var response=await fetch(PROXY_URL,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'claude-sonnet-4-5',max_tokens:1000,messages:[{role:'user',content:prompt}]})});
 var data=await response.json();
 var text=data.content[0].text;
 var clean=text.replace(/```json|```/g,'').trim();
